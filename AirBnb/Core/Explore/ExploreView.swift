@@ -23,7 +23,8 @@ struct ExploreView: View {
                 .padding()
             }
             .navigationDestination(for: Int.self) { listingId in
-                Text("Listing Details \(listingId)")
+                ListingDetailView()
+                    .toolbar(.hidden)
             }
         }
     }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct ListingDetailView: View {
     
@@ -16,10 +17,25 @@ struct ListingDetailView: View {
         "listin-4",
     ]
     
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
-        ScrollView {
-            ImageCarouselView()
-                .frame(height: 320)
+        ScrollView(showsIndicators: false) {
+            ZStack(alignment: .topLeading) {
+                ImageCarouselView()
+                    .frame(height: 320)
+                
+                Button(action: { dismiss() }) {
+                    Image(systemName: "chevron.left")
+                        .foregroundStyle(.black)
+                        .background {
+                            Circle()
+                                .fill(.white)
+                                .frame(width: 32, height: 32)
+                        }
+                        .padding(32)
+                }
+            }
             
             VStack(alignment: .leading, spacing: 8) {
                 Text("Apê moderno na Bela vista")
@@ -81,6 +97,100 @@ struct ListingDetailView: View {
             .padding()
             
             Divider()
+            
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Where you'll sleep")
+                    .font(.headline)
+                    .padding(.horizontal)
+                    .padding(.top)
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 16) {
+                        ForEach(1..<4, id: \.self) { bedroom in
+                            VStack(alignment: .leading, spacing: 6) {
+                                Image(systemName: "bed.double")
+                                Text("Beedroom \(bedroom)")
+                                    .font(.footnote)
+                            }
+                            .frame(width: 132, height: 100, alignment: .leading)
+                            .padding(.leading)
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(lineWidth: 1)
+                                    .foregroundStyle(.gray)
+                            }
+                            .padding(.leading, bedroom == 1 ? 16 : 0)
+                            .padding(.trailing, bedroom == 3 ? 16 : 0)
+                        }
+                    }
+                    .scrollTargetBehavior(.paging)
+                }
+                .padding(.bottom, 16)
+            }
+            
+            Divider()
+            
+            VStack(alignment: .leading, spacing: 16) {
+                Text("What this place offers")
+                    .font(.headline)
+                
+                ForEach(0..<5) { feature in
+                    HStack {
+                        Image(systemName: "tv")
+                            .frame(width: 32)
+                        Text("TV")
+                            .font(.footnote)
+                        Spacer()
+                    }
+                }
+            }
+            .padding()
+            
+            Divider()
+            
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Where you'll be")
+                    .font(.headline)
+                
+                Map()
+                    .frame(height: 200)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+            .padding()
+        }
+        .ignoresSafeArea()
+        .padding(.bottom, 110)
+        .overlay(alignment: .bottom) {
+            VStack {
+                Divider()
+                
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text("R$1.387")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                        Text("Total before taxes")
+                            .font(.footnote)
+                        Text("7 - 9 de set.")
+                            .font(.footnote)
+                            .fontWeight(.medium)
+                            .underline()
+                    }
+                    
+                    Spacer()
+                    
+                    Button(action: { }, label: {
+                        Text("Reserve")
+                            .foregroundStyle(.white)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .frame(width: 140, height: 40)
+                            .background(.pink)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                    })
+                }
+                .padding()
+            }
+            .background(.white)
         }
     }
 }
